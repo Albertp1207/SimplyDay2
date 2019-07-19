@@ -1,20 +1,13 @@
-function Person(name,age) {
-    this.name = name;
-    this.age = age;
-    this.intervId = setInterval(()=>{
-        this.age++;
-        },1000)
+
+class Person{
+    constructor(name,age) {
+        this.name = name;
+        this.age = age;
+        this.intervId = setInterval(()=>{
+            this.age++;
+            },1000)
+    }    
 }
-//it's instead top
-// class Person{
-//     constructor(name,age) {
-//         this.name = name;
-//         this.age = age;
-//         this.intervId = setInterval(()=>{
-//             this.age++;
-//             },1000)
-//     }    
-// }
 
 let personsArr = [new Person("asd",37),
                   new Person("oooood",39),
