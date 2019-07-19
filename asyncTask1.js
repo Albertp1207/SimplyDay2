@@ -5,6 +5,16 @@ function Person(name,age) {
         this.age++;
         },1000)
 }
+//it's instead top
+// class Person{
+//     constructor(name,age) {
+//         this.name = name;
+//         this.age = age;
+//         this.intervId = setInterval(()=>{
+//             this.age++;
+//             },1000)
+//     }    
+// }
 
 let personsArr = [new Person("asd",37),
                   new Person("oooood",39),
@@ -33,7 +43,8 @@ function checkAge(arr){
 function createPerson(arr){
     setInterval(()=>{
         const newPersonName = makeRandomName(4);
-        const newPersonAge = Math.floor(1+Math.random() * 50)
+        const newPersonAge = Math.floor(1+Math.random() * 50);
+        console.log(newPersonName + "added" )
         arr.push(new Person(newPersonName,newPersonAge))
     },2000)
 }
