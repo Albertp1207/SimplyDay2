@@ -33,7 +33,7 @@ class Gladiator {
         }
         console.log(`[${this.name}]x${this.health} hits [${opponentGladiator.name}] with power ${this.power}`)
         new Promise((resolve,reject)=> {
-            setTimeout(opponentGladiator.getHit.bind(opponentGladiator,resolve,reject,this),interval)
+            this.intervId = setTimeout(opponentGladiator.getHit.bind(opponentGladiator,resolve,reject,this),interval)
         }).then(()=> {
             this.startHitting();
         }).catch(() => {
@@ -45,6 +45,7 @@ class Gladiator {
 
     getHit(resolve,reject,hitter){
         if(this.game.isPause) {
+            console.log("-----")
             return false
         }
         if(this.game.gameFinished) {
@@ -129,6 +130,9 @@ function makeGame(gladiatorsNum) {
             this.continueBattle();
         },
         pauseBattle: function() {
+            this.gladiators.forEach(gladiator=>{
+                clearTimeout(gladiator.intervId)
+            })
             this.isPause = true;
         },
 
