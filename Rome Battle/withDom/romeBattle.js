@@ -99,7 +99,6 @@ function makeGame(gladiatorsNum) {
         },
         continueBattle: function() {
             if(this.gameFinished) {
-                alert('asd')
                 return
             }
             this.startBattle();
