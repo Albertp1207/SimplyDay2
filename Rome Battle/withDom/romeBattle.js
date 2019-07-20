@@ -27,29 +27,19 @@ class Gladiator {
         
     }
 
-    hit(opponentGladiator,power,interval){
-        if(this.game.gameFinished) {
-            return
-        }
+    hit(opponentGladiator,interval){
         domLog(`[${this.name}]x${this.health} hits [${opponentGladiator.name}] with power ${this.power}`)
         new Promise((resolve,reject)=> {
-            setTimeout(opponentGladiator.getHit.bind(opponentGladiator,resolve,reject,this),interval)
+            this.intervId = setTimeout(opponentGladiator.getHit.bind(opponentGladiator,resolve,reject,this),interval)
         }).then(()=> {
             this.startHitting();
         }).catch(() => {
-
-            this.game.makeDecision(this)
+            this.game.makeDecision(opponentGladiator)
         })
 
     }
 
-    getHit(resolve,reject,hitter){
-        if(this.game.isPause) {
-            return false
-        }
-        if(this.game.gameFinished) {
-            return    
-        }
+    getHit(resolve,reject,hitter){        
         this.health = this.health - hitter.power;
         if(this.health >= 15 && this.health <= 30){
             this.speed = this.initialSpeed;
@@ -57,14 +47,10 @@ class Gladiator {
         if(this.health <= 0) {
             domLog(`[${this.name}] dying`);
 
-            reject(this.index);
+            reject();
         } else {
-            resolve(this)
+            resolve()
         }
-    }
-
-    die(){
-        this.isDied = true;
     }
 }
 
@@ -88,14 +74,12 @@ gm.makeArena(gm);
 
 function makeGame(gladiatorsNum) {
     return {
-        isPause: false,
         gameFinished:false,
         gladiators: gladiatorFactory(gladiatorsNum),
         removeGladiator: function(gladiator){
             domLog(`Caesar showed :-1: to [${gladiator.name}]`);
-            gladiator.die();
             this.gladiators.splice(gladiator.index,1);
-            if(this.gladiators.length <= 1) {
+            if(this.gladiators.length == 1) {
                 this.gameOver(this.gladiators[0])
                 return;
             } 
@@ -115,9 +99,9 @@ function makeGame(gladiatorsNum) {
         },
         continueBattle: function() {
             if(this.gameFinished) {
+                alert('asd')
                 return
             }
-            this.isPause = false,
             this.startBattle();
         },
         makeDecision: function(gladiator)  {
@@ -129,7 +113,10 @@ function makeGame(gladiatorsNum) {
             this.continueBattle();
         },
         pauseBattle: function() {
-            this.isPause = true;
+
+            this.gladiators.forEach(gladiator=>{
+                clearTimeout(gladiator.intervId)
+            })
         },
 
         makeArena: function(game) {
@@ -148,7 +135,6 @@ function makeGame(gladiatorsNum) {
 function start() {
     gm.startBattle();
 }
-
 const arenaInDom = document.getElementById("arena");
 function domLog(text) {
     const p = document.createElement("p")
